@@ -3,6 +3,8 @@ Python
 
 Ansible role for installing Python from source.
 
+Inspired by https://medium.com/@perwagnernielsen/ansible-tutorial-part-2-installing-packages-41d3ab28337d
+
 Role Variables
 --------------
 
