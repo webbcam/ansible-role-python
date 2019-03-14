@@ -1,0 +1,6 @@
+---
+
+python_version: 3.7.2
+python_short_version: "{{ python_version.split('.')[0] }}.{{ python_version.split('.')[1] }}"
+python_symlink: false
+python_force_install: false

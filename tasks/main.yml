@@ -1,0 +1,64 @@
+---
+- name: Check that the /usr/local/bin/python{{ python_short_version }} exists
+  stat:
+    path: /usr/local/bin/python{{ python_short_version }}
+  tags: python
+  register: python_result
+
+- name: Update apt-cache
+  apt: update_cache=yes
+  tags: packages, python
+  when: not python_result.stat.exists or python_force_install
+
+- name: Install packages needed for installing Python
+  apt: pkg={{ item }}
+  with_items:
+    - wget
+    - xz-utils
+    - build-essential
+    - libsqlite3-dev
+    - libreadline-dev
+    - libssl-dev
+    - openssl
+  tags: packages, python
+  when: not python_result.stat.exists or python_force_install
+
+- name: Extract python {{ python_version }} into /tmp
+  unarchive:
+    src: https://www.python.org/ftp/python/{{ python_version }}/Python-{{ python_version }}.tar.xz
+    dest: /tmp/
+    remote_src: yes
+  tags: packages, python
+  when: not python_result.stat.exists or python_force_install
+
+- name: Configure python {{ python_version }}
+  shell: ./configure chdir=/tmp/Python-{{ python_version }}
+  tags: packages, python
+  when: not python_result.stat.exists or python_force_install
+
+- name: Make
+  shell: make chdir=/tmp/Python-{{ python_version }}
+  tags: packages, python
+  when: not python_result.stat.exists or python_force_install
+
+- name: Install Python {{ python_version }}
+  shell: make install chdir=/tmp/Python-{{ python_version }}
+  become: yes
+  become_user: root
+  tags: packages, python
+  when: not python_result.stat.exists or python_force_install
+
+- name: Remove tmp files used for Python {{ python_version }} installation
+  file: path={{ item }} state=absent
+  with_items:
+    - /tmp/Python.tar.xz
+    - /tmp/Python-{{ python_version }}
+  tags: packages, python
+  when: not python_result.stat.exists or python_force_install
+
+- name: Create symlink to python
+  file:
+    path: /usr/local/bin/python
+    src: /usr/local/bin/python{{ python_short_version }}
+    state: link
+  when: python_symlink
