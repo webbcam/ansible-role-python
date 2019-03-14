@@ -19,6 +19,7 @@ Role Variables
 
 Example Playbook
 ----------------
+::
 
     - hosts: all
       roles:
