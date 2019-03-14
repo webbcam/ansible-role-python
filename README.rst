@@ -1,9 +1,7 @@
 Python
 ======
 
-Ansible role for installing Python from source.
-
-Inspired by `this post`_
+Ansible role for installing Python from source. Inspired by `this post`_.
 
 Role Variables
 --------------
