@@ -23,7 +23,7 @@ Example Playbook
 
     - hosts: all
       roles:
-         - { role: webbcam.python, python_version: 2.7.16, python_symlink: yes }
+         - { role: ansible-role-python, python_version: 2.7.16, python_symlink: yes }
 
 License
 -------
